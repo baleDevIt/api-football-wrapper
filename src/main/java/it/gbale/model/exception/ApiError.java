@@ -1,4 +1,4 @@
-package it.gbale.entity;
+package it.gbale.model.exception;
 
 public class ApiError {
     private String message;
