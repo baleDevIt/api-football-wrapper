@@ -1,4 +1,4 @@
-package it.gbale.entity;
+package it.gbale.model.core;
 
 import java.io.Serializable;
 
