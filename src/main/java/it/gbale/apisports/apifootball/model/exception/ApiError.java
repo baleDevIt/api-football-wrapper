@@ -1,4 +1,4 @@
-package it.gbale.model.exception;
+package it.gbale.apisports.apifootball.model.exception;
 
 public class ApiError {
     private String message;
