@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-@JsonDeserialize(using = ApiResponseDeserializer.class)
 public class ApiResponse <T>{
 
 
@@ -24,6 +23,4 @@ public class ApiResponse <T>{
     private Paging paging;
     @JsonProperty("response")
     private List<T> response;
-
-
 }
