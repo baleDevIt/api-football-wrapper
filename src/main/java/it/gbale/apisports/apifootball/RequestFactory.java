@@ -5,6 +5,7 @@ import static it.gbale.apisports.utils.Validation.*;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import it.gbale.apisports.apifootball.model.core.ApiResponse;
+import it.gbale.apisports.apifootball.model.exception.ApiError;
 import it.gbale.apisports.apifootball.model.parameterEnum.BaseParams;
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
@@ -91,9 +92,15 @@ final class RequestFactory {
                     Type collectionType = TypeToken.getParameterized(ApiResponse.class, someClass).getType();
                     Reader json = new InputStreamReader(response.getEntity().getContent());
                     return gson.create().fromJson(json, collectionType);
+                }else if(_isNotNull(response) && response.getStatusLine().getStatusCode() == 204){
+                    //TODO: Aggiungere gestione per errori 204
+                    throw new RuntimeException("Errore 204");
+                }else if(_isNotNull(response) && response.getStatusLine().getStatusCode() >= 400 && response.getStatusLine().getStatusCode() <= 500){
+                    Reader json = new InputStreamReader(response.getEntity().getContent());
+                    throw gson.create().fromJson(json, ApiError.class);
                 }else{
-                    //TODO: Aggiungere gestione per errori 204, 499, 500
-                    throw new RuntimeException();
+                    logger.error(response.getEntity().getContent());
+                    throw new ApiError("Request error - See logs for more info");
                 }
             });
         } catch (IOException e) {
@@ -134,6 +141,9 @@ final class RequestFactory {
      * @return
      */
     private Map<String,String> parameterAdapter(Map<? extends BaseParams,String> parameters){
+        if(_isNull(parameters)){
+            return new HashMap<>();
+        }
         Map<String,String> mapToReturn = new HashMap<>();
         parameters.forEach((key, value) -> mapToReturn.put(key.getValue(),value));
         return mapToReturn;
