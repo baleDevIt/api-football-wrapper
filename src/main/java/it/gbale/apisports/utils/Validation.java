@@ -4,7 +4,7 @@ public class Validation {
 
     public static void _assertNotNull(Object paramName) {
         if (paramName == null) {
-            throw new IllegalArgumentException(String.format("argument \"%s\" is null", paramName.getClass().getName()));
+            throw new IllegalArgumentException(String.format("argument is null"));
         }
     }
 
@@ -50,5 +50,9 @@ public class Validation {
             return false;
         }
         return true;
+    }
+
+    public static boolean _isNull(Object paramName) {
+        return !_isNotNull(paramName);
     }
 }
