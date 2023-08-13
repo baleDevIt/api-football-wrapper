@@ -1,11 +1,13 @@
 package it.gbale.apisports.apifootball.model.exception;
 
-public class ApiError {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class ApiError extends RuntimeException {
+    @JsonProperty("message")
     private String message;
 
     public ApiError() {
         super();
-        this.message = "Generic Error - I don't know what happened!";
     }
 
     public ApiError(String message) {
