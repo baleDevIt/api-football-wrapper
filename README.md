@@ -9,12 +9,12 @@
 <h3 align="center">Api-football-wrapper</h3>
 <div>
   <p align="center">
-    An unofficial wrapper for Api-football & Api-Sports!
+    An unofficial wrapper for Api-football & Api-Sports! (Work in progress)
     <br />
-    <a href="https://www.api-football.com/documentation-v3"><strong>Explore official api docs »</strong></a>
+    <a href="https://www.api-football.com/sports"><strong>Explore official api docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/baleDevIt/api-football-wrapper">Usage example</a>
+    <a href="https://github.com/baleDevIt/api-football-wrapper/">Usage example</a>
     ·
     <a href="https://github.com/baleDevIt/api-football-wrapper/issues">Report Bug</a>
     ·
@@ -110,10 +110,18 @@ _For more examples, please refer to the [Example Section](https://example.com)_
 
 
 <!-- ROADMAP -->
-## Roadmap for API_V3.9.2 
+## Roadmap
 
-- [ ] Support All basic endpoints 
-- [ ] Add on Maven Central
+- [ ] Support endpoints API-FOOTBALL
+- [ ] Support endpoints API-BASKETBALL
+- [ ] Support endpoints API-BASEBALL
+- [ ] Support endpoints API-FORMULA-1
+- [ ] Support endpoints API-HANDBALL
+- [ ] Support endpoints API-HOCKEY
+- [ ] Support endpoints API-NBA
+- [ ] Support endpoints API-AMERICAN-FOOTBALL
+- [ ] Support endpoints API-RUGBY
+- [ ] Support endpoints API-VOLLEYBALL
 
 See the [open issues](https://github.com/baleDevIt/api-football-wrapper/issues) for a full list of proposed features (and known issues).
 
