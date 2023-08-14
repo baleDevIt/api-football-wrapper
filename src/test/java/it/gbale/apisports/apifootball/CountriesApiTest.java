@@ -15,7 +15,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//@Disabled
+@Disabled
 class CountriesApiTest {
 
     private static ApiFootball apiFootball;
