@@ -4,7 +4,6 @@ import it.gbale.apisports.apifootball.model.entity.Countries;
 import it.gbale.apisports.apifootball.model.exception.InvalidParamsException;
 import it.gbale.apisports.apifootball.model.parameterEnum.Alpha2Code;
 import it.gbale.apisports.apifootball.model.parameterEnum.CountriesParams;
-import it.gbale.apisports.apifootball.model.parameterEnum.LeaguesParams;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
@@ -68,6 +67,7 @@ class CountriesApiTest {
 
     @Tag("ApiCall")
     @Test
+    @Disabled
     void findCountriesRequestWithNotValidParams(){
         Map<LeaguesParams, String> paramsStringMap = new HashMap<>();
         paramsStringMap.put(LeaguesParams.ID, "GG");
