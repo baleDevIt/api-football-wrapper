@@ -66,6 +66,7 @@ class CountriesApiTest {
         assertTrue(countriesList.size() == 0);
     }
 
+    @Tag("ApiCall")
     @Test
     void findCountriesRequestWithNotValidParams(){
         Map<LeaguesParams, String> paramsStringMap = new HashMap<>();
