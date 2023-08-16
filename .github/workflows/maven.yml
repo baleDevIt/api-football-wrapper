@@ -30,6 +30,8 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package -DexcludedGroups=ApiCall --file pom.xml
+      env:
+        SERVICETOKEN : ${{secrets.SERVICETOKEN}}
     - name: Create directory and copy file
       run: mkdir staging && cp target/*.jar staging
     - name: Upload a Build Artifact
