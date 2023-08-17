@@ -60,4 +60,15 @@ public class ApiFootball {
         }
     }
 
+    public SeasonsApi seasonsApi(){
+        if(instancePool.containsKey(SeasonsApi.class)){
+            return (SeasonsApi)  instancePool.get(SeasonsApi.class);
+        }
+        else{
+            SeasonsApi seasonsApi = new SeasonsApi(requestFactory);
+            instancePool.put(SeasonsApi.class, seasonsApi);
+            return seasonsApi;
+        }
+    }
+
 }
