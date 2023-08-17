@@ -61,7 +61,6 @@ final class RequestFactory {
                 .registerTypeAdapter(ZoneId.class, new ZoneIdTypeAdapter())
                 .create();
         this.client = HttpClients.createDefault();
-        logger.info("ActiveEndpoint is - " + this.activeEndpoint);
     }
 
     /**
@@ -71,16 +70,11 @@ final class RequestFactory {
      * - api-football-v1.p.rapidapi.com/v3/[terminalEndpoint]
      */
     HttpGet buildRequest(String terminalEndpoint, Map<String,String> parameters){
-        try {
-            URI uri = _URIMaker(activeEndpoint,terminalEndpoint, parameters);
-            HttpGet request = new HttpGet(uri);
-            request.addHeader(V3_FOOTBALL_HOST_HEADER);
-            request.addHeader(headerToken);
-            logger.info(this.getClass().getName() + " - buildRequest - Create uri " + uri.toString());
-            return request;
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        URI uri = _URIMaker(activeEndpoint,terminalEndpoint, parameters);
+        HttpGet request = new HttpGet(uri);
+        request.addHeader(V3_FOOTBALL_HOST_HEADER);
+        request.addHeader(headerToken);
+        return request;
     }
 
     @SuppressWarnings("unused")
@@ -97,7 +91,13 @@ final class RequestFactory {
                 if(response.getStatusLine().getStatusCode() == 200){
                     Type collectionType = TypeToken.getParameterized(ApiResponse.class, someClass).getType();
                     Reader json = new InputStreamReader(response.getEntity().getContent());
-                    return gson.fromJson(json, collectionType);
+                    ApiResponse<T> objResp = gson.fromJson(json, collectionType);
+                    if(objResp.getErrors().size() > 0){
+                        StringBuffer exepBuffer = new StringBuffer("Exception in request ");
+                        objResp.getErrors().forEach((key, value) -> exepBuffer.append(key).append(" ").append(value));
+                        throw new ApiError(exepBuffer.toString());
+                    }
+                    return objResp;
                 }else if(response.getStatusLine().getStatusCode() == 204){
                     //TODO: Aggiungere gestione per errori 204
                     throw new RuntimeException("Errore 204");
@@ -122,22 +122,25 @@ final class RequestFactory {
      * @param terminalEndpoint - Sezione finale dell'endpoint caratteristica di ogni chiamata
      * @param parameters - Parametri da aggiungere alla chiamata
      * @return URI
-     * @throws URISyntaxException
      * new ApiResponce<CountriesParams>(){}.getClass()
      */
-    private URI _URIMaker(String endpoint, String terminalEndpoint, Map<String,String> parameters) throws URISyntaxException {
+    private URI _URIMaker(String endpoint, String terminalEndpoint, Map<String,String> parameters) {
         _assertNotNullorEmpty(endpoint);
-        URIBuilder uri = new URIBuilder(endpoint);
+        try {
+            URIBuilder uri = new URIBuilder(endpoint);
 
-        if(_isNotNullorEmpty(terminalEndpoint)){
-            uri.setPathSegments(terminalEndpoint);
+            if(_isNotNullorEmpty(terminalEndpoint)){
+                uri.setPathSegments(terminalEndpoint);
+            }
+            if(_isNotNull(parameters)){
+                List<NameValuePair> parameterForURI = new ArrayList<>();
+                parameters.forEach((key, value) -> parameterForURI.add(new BasicNameValuePair(key,value)));
+                uri.addParameters(parameterForURI);
+            }
+            return uri.build();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
-        if(_isNotNull(parameters)){
-            List<NameValuePair> parameterForURI = new ArrayList<>();
-            parameters.forEach((key, value) -> parameterForURI.add(new BasicNameValuePair(key,value)));
-            uri.addParameters(parameterForURI);
-        }
-        return uri.build();
     }
 
     /**
@@ -153,4 +156,7 @@ final class RequestFactory {
         return mapToReturn;
     }
 
+    public String getActiveEndpoint() {
+        return activeEndpoint;
+    }
 }
