@@ -2,8 +2,10 @@ package it.gbale.apisports.apifootball;
 
 import static it.gbale.apisports.utils.Validation.*;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import it.gbale.apisports.apifootball.adapter.ZoneIdTypeAdapter;
 import it.gbale.apisports.apifootball.model.core.ApiResponse;
 import it.gbale.apisports.apifootball.model.exception.ApiError;
 import it.gbale.apisports.apifootball.model.parameterEnum.BaseParams;
@@ -24,6 +26,7 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,16 +39,16 @@ final class RequestFactory {
     private static final Header V3_FOOTBALL_HOST_HEADER = new BasicHeader("x-rapidapi-host","v3.football.api-sports.io");
     private static final String RAPIDAPI_HEADER_KEY = "x-rapidapi-key";
     private static final Logger logger = LogManager.getLogger(RequestFactory.class);
-    private Header headerToken;
-    private final GsonBuilder gson;
-    private String activeEndpoint;
+    private final Header headerToken;
+    private final Gson gson;
+    private final String activeEndpoint;
     private final CloseableHttpClient client;
 
 
 
 
 
-    protected RequestFactory(String activeToken, boolean isApiSportsEndpoint) {
+    RequestFactory(String activeToken, boolean isApiSportsEndpoint) {
         _assertNotNullorEmpty(activeToken);
 
         if(isApiSportsEndpoint){
@@ -54,18 +57,20 @@ final class RequestFactory {
             this.activeEndpoint = RAPID_API_URL;
         }
         this.headerToken = new BasicHeader(RAPIDAPI_HEADER_KEY, activeToken);
-        this.gson = new GsonBuilder();
+        this.gson = new GsonBuilder()
+                .registerTypeAdapter(ZoneId.class, new ZoneIdTypeAdapter())
+                .create();
         this.client = HttpClients.createDefault();
         logger.info("ActiveEndpoint is - " + this.activeEndpoint);
     }
 
     /**
      * Restituisce una richiesta preformattata per il terminalEndpoint specificato
-     * https://v3.football.api-sports.io/[terminalEndpoint]
-     * https://api-football-v1.p.rapidapi.com/v3/[terminalEndpoint]
-     * @return
+     * Es.
+     * - v3.football.api-sports.io/[terminalEndpoint]
+     * - api-football-v1.p.rapidapi.com/v3/[terminalEndpoint]
      */
-    protected HttpGet buildRequest(String terminalEndpoint, Map<String,String> parameters){
+    HttpGet buildRequest(String terminalEndpoint, Map<String,String> parameters){
         try {
             URI uri = _URIMaker(activeEndpoint,terminalEndpoint, parameters);
             HttpGet request = new HttpGet(uri);
@@ -78,26 +83,27 @@ final class RequestFactory {
         }
     }
 
-    protected HttpGet buildRequest(String terminalEndpoint){
+    @SuppressWarnings("unused")
+    HttpGet buildRequest(String terminalEndpoint){
         return this.buildRequest(terminalEndpoint,null);
     }
 
-    protected <T> ApiResponse<T> makeRequest(String terminalEndpoint, Map<? extends BaseParams,String> parameters, Class<T> someClass){
+    <T> ApiResponse<T> makeRequest(String terminalEndpoint, Map<? extends BaseParams,String> parameters, Class<T> someClass){
         try {
             HttpGet request = buildRequest(terminalEndpoint,parameterAdapter(parameters));
             return client.execute(request, response -> {
                 StringBuilder sb = new StringBuilder("Make Request ").append(request.getMethod()).append(response.getStatusLine().getStatusCode()).append(request.getURI());
                 logger.info(sb);
-                if(_isNotNull(response) && response.getStatusLine().getStatusCode() == 200){
+                if(response.getStatusLine().getStatusCode() == 200){
                     Type collectionType = TypeToken.getParameterized(ApiResponse.class, someClass).getType();
                     Reader json = new InputStreamReader(response.getEntity().getContent());
-                    return gson.create().fromJson(json, collectionType);
-                }else if(_isNotNull(response) && response.getStatusLine().getStatusCode() == 204){
+                    return gson.fromJson(json, collectionType);
+                }else if(response.getStatusLine().getStatusCode() == 204){
                     //TODO: Aggiungere gestione per errori 204
                     throw new RuntimeException("Errore 204");
-                }else if(_isNotNull(response) && response.getStatusLine().getStatusCode() >= 400 && response.getStatusLine().getStatusCode() <= 500){
+                }else if(response.getStatusLine().getStatusCode() >= 400 && response.getStatusLine().getStatusCode() <= 500){
                     Reader json = new InputStreamReader(response.getEntity().getContent());
-                    throw gson.create().fromJson(json, ApiError.class);
+                    throw gson.fromJson(json, ApiError.class);
                 }else{
                     logger.error(response.getEntity().getContent());
                     throw new ApiError("Request error - See logs for more info");
@@ -106,7 +112,7 @@ final class RequestFactory {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    };
+    }
 
 
     /**
@@ -137,8 +143,6 @@ final class RequestFactory {
     /**
      * Metodo utile nella conversione dei parametri in ingresso per la richiesta con la formattazione richiesta
      * dall'implementazione di questa classe buildRequest
-     * @param parameters
-     * @return
      */
     private Map<String,String> parameterAdapter(Map<? extends BaseParams,String> parameters){
         if(_isNull(parameters)){

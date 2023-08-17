@@ -1,26 +1,24 @@
 package it.gbale.apisports.apifootball;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static it.gbale.apisports.utils.Validation.*;
 
 /**
  * Wrapper entry class for Football Api
- * Official request documentation {@URL https://www.api-football.com/documentation-v3}
  */
-public class ApiFootball extends BaseApi {
+public class ApiFootball {
 
     private final RequestFactory requestFactory;
 
-    //TODO: Raccolta di instanze gestite in questa classe
-
+    private final Map<Class<?>, BaseApi> instancePool = new HashMap<>();
 
     /**
      * Costruttore della Wrapper entry class ApiSports.
      * Permette di impostare il token di autenticazione al servizio e l'endpoint base a cui effettuare le chiamate.
-     * Se @param isApiSportsEndpoint è true questo costruttore imposta automaticamente l'endpoint {@URL https://v3.football.api-sports.io/}
-     * altrimenti l'endpoint utilizzato nelle chiamate sarà {@URL https://api-football-v1.p.rapidapi.com/v3/}
-     *
-     * @param token
-     * @param isApiSportsEndpoint
+     * Se @param isApiSportsEndpoint è true questo costruttore imposta automaticamente l'endpoint @see <a href="https://v3.football.api-sports.io/">v3.football.api-sports.io</a>
+     * altrimenti l'endpoint utilizzato nelle chiamate sarà @see <a href="https://api-football-v1.p.rapidapi.com/v3/">api-football-v1.p.rapidapi.com</a>
      */
     public ApiFootball(String token, boolean isApiSportsEndpoint) {
         _assertNotNullorEmpty(token);
@@ -34,17 +32,32 @@ public class ApiFootball extends BaseApi {
     /**
      * Costruttore della Wrapper entry class ApiSports.
      * Permette di impostare il token di autenticazione al servizio e l'endpoint base a cui effettuare le chiamate.
-     * Di default questo costruttore imposta automaticamente l'endpoint {@URL https://v3.football.api-sports.io/}
-     *
-     * @param token
+     * Di default questo costruttore imposta automaticamente l'endpoint @see <a href="https://v3.football.api-sports.io/">v3.football.api-sports.io</a>
      */
     public ApiFootball(String token) {
         this(token,true);
     }
 
     public CountriesApi countriesApi(){
-        //TODO: Aggiungere gestione delle istanze
-        return new CountriesApi(requestFactory);
+        if(instancePool.containsKey(CountriesApi.class)){
+            return (CountriesApi)  instancePool.get(CountriesApi.class);
+        }
+        else{
+            CountriesApi countriesApi = new CountriesApi(requestFactory);
+            instancePool.put(CountriesApi.class, countriesApi);
+            return countriesApi;
+        }
+    }
+
+    public TimezoneApi timezoneApi(){
+        if(instancePool.containsKey(TimezoneApi.class)){
+            return (TimezoneApi)  instancePool.get(TimezoneApi.class);
+        }
+        else{
+            TimezoneApi timezoneApi = new TimezoneApi(requestFactory);
+            instancePool.put(TimezoneApi.class, timezoneApi);
+            return timezoneApi;
+        }
     }
 
 }
