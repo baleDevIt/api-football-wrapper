@@ -1,8 +1,9 @@
 package it.gbale.apisports.apifootball;
 
+import it.gbale.apisports.apifootball.model.core.ApiResponse;
 import it.gbale.apisports.apifootball.model.entity.Countries;
 import it.gbale.apisports.apifootball.model.exception.InvalidParamsException;
-import it.gbale.apisports.apifootball.model.parameterEnum.Alpha2Code;
+import it.gbale.apisports.apifootball.model.parameterEnum.CountryCode;
 import it.gbale.apisports.apifootball.model.parameterEnum.CountriesParams;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
@@ -37,7 +38,7 @@ class CountriesApiTest {
     void findCountriesRequestSuccess(){
         List<Countries> countriesList;
         Map<CountriesParams, String> paramsStringMap = new HashMap<>();
-        paramsStringMap.put(CountriesParams.CODE, Alpha2Code.IT.name());
+        paramsStringMap.put(CountriesParams.CODE, CountryCode.IT.name());
         try {
             countriesList = apiFootball.countriesApi().findCountries(paramsStringMap);
         } catch (InvalidParamsException e) {
@@ -95,6 +96,16 @@ class CountriesApiTest {
     @Test
     void findCountriesBySearchRequestWithEmptyParams(){
         assertThrows(IllegalArgumentException.class, () -> apiFootball.countriesApi().findCountriesBySearch(""));
+    }
+
+    @Tag("ApiCall")
+    @Test
+    void getResponseRequestSuccess(){
+        ApiResponse<Countries> response =  apiFootball.countriesApi().getResponse();
+        assertNotNull(response);
+        assertNotEquals(response.getResponse().size(),0);
+        assertEquals(response.getErrors().size(),0);
+        response.getResponse().forEach(value -> assertInstanceOf(Countries.class, value));
     }
 
 }

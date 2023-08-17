@@ -5,7 +5,7 @@ import static it.gbale.apisports.utils.Validation.*;
 import it.gbale.apisports.apifootball.model.core.ApiResponse;
 import it.gbale.apisports.apifootball.model.entity.Countries;
 import it.gbale.apisports.apifootball.model.exception.InvalidParamsException;
-import it.gbale.apisports.apifootball.model.parameterEnum.Alpha2Code;
+import it.gbale.apisports.apifootball.model.parameterEnum.CountryCode;
 import it.gbale.apisports.apifootball.model.parameterEnum.BaseParams;
 import it.gbale.apisports.apifootball.model.parameterEnum.CountriesParams;
 import org.apache.logging.log4j.LogManager;
@@ -21,7 +21,7 @@ public class CountriesApi{
     private static final Logger logger = LogManager.getLogger(CountriesApi.class);
 
 
-    private RequestFactory requestFactory;
+    private final RequestFactory requestFactory;
 
     public CountriesApi(RequestFactory requestFactory) {
         _assertNotNull(requestFactory);
@@ -35,7 +35,7 @@ public class CountriesApi{
 
     /**
      * Get All with ApiResponse object
-     * @return
+     * @return ApiResponse.class
      */
     public ApiResponse<Countries> getResponse(){
         return requestFactory.makeRequest(ENDPOINT, null, Countries.class);
@@ -58,16 +58,15 @@ public class CountriesApi{
         return response.getResponse();
     }
 
-    public List<Countries> findCountriesByCode(Alpha2Code code){
+    @SuppressWarnings("UnusedReturnValue")
+    public List<Countries> findCountriesByCode(CountryCode code){
         _assertNotNull(code);
-        ApiResponse<Countries> response = requestFactory.makeRequest(ENDPOINT, makeParams(CountriesParams.CODE,code.name()), Countries.class);
-        return response.getResponse();
+        return requestFactory.makeRequest(ENDPOINT, makeParams(CountriesParams.CODE,code.name()), Countries.class).getResponse();
     }
-
+    @SuppressWarnings("UnusedReturnValue")
     public List<Countries> findCountriesBySearch(String search){
         _assertNotNullorEmpty(search);
-        ApiResponse<Countries> response = requestFactory.makeRequest(ENDPOINT, makeParams(CountriesParams.SEARCH,search), Countries.class);
-        return response.getResponse();
+        return requestFactory.makeRequest(ENDPOINT, makeParams(CountriesParams.SEARCH,search), Countries.class).getResponse();
     }
 
     private Map<CountriesParams, String> makeParams(CountriesParams key, String value){
