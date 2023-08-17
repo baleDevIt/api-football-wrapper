@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CountriesApi{
+public class CountriesApi extends BaseApi {
 
     private static final String ENDPOINT = "countries";
     private static final Logger logger = LogManager.getLogger(CountriesApi.class);

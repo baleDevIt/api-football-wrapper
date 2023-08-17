@@ -1,16 +1,18 @@
 package it.gbale.apisports.apifootball;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static it.gbale.apisports.utils.Validation.*;
 
 /**
  * Wrapper entry class for Football Api
  */
-public class ApiFootball extends BaseApi {
+public class ApiFootball {
 
     private final RequestFactory requestFactory;
 
-    //TODO: Raccolta di instanze gestite in questa classe
-
+    private final Map<Class<?>, BaseApi> instancePool = new HashMap<>();
 
     /**
      * Costruttore della Wrapper entry class ApiSports.
@@ -37,13 +39,25 @@ public class ApiFootball extends BaseApi {
     }
 
     public CountriesApi countriesApi(){
-        //TODO: Aggiungere gestione delle istanze
-        return new CountriesApi(requestFactory);
+        if(instancePool.containsKey(CountriesApi.class)){
+            return (CountriesApi)  instancePool.get(CountriesApi.class);
+        }
+        else{
+            CountriesApi countriesApi = new CountriesApi(requestFactory);
+            instancePool.put(CountriesApi.class, countriesApi);
+            return countriesApi;
+        }
     }
 
     public TimezoneApi timezoneApi(){
-        //TODO: Aggiungere gestione delle istanze
-        return new TimezoneApi(requestFactory);
+        if(instancePool.containsKey(TimezoneApi.class)){
+            return (TimezoneApi)  instancePool.get(TimezoneApi.class);
+        }
+        else{
+            TimezoneApi timezoneApi = new TimezoneApi(requestFactory);
+            instancePool.put(TimezoneApi.class, timezoneApi);
+            return timezoneApi;
+        }
     }
 
 }
