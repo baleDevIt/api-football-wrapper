@@ -15,4 +15,9 @@ public abstract class BaseApi {
         return paramsStringMap;
     }
 
+    @SuppressWarnings("SameParameterValue")
+    protected Map<BaseParams, String> makeParams(BaseParams key, Integer value){
+        return this.makeParams(key,String.valueOf(value));
+    }
+
 }

@@ -5,12 +5,13 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Year;
 
 @Data
 public class Season implements Serializable {
 
     @JsonProperty("year")
-    private Integer year;
+    private Year year;
 
     @JsonProperty("start")
     private LocalDate start;

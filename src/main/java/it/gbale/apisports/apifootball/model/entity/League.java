@@ -2,12 +2,14 @@ package it.gbale.apisports.apifootball.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.net.URI;
 import java.util.List;
 
 @Data
+@ToString
 public class League implements Serializable {
 
     @JsonProperty("id")
