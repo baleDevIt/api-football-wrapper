@@ -3,12 +3,13 @@ package it.gbale.apisports.apifootball.model.entity;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class Coverage {
+public class Coverage implements Serializable {
 
     @JsonProperty("fixtures")
-    private Fixture fixtures;
-
+    private CoverageFixture fixtures;
     @JsonProperty("standings")
     private boolean standings;
     @JsonProperty("players")
@@ -26,6 +27,17 @@ public class Coverage {
     @JsonProperty("odds")
     private boolean odds;
 
+}
 
+@Data
+class CoverageFixture implements Serializable  {
 
+    @JsonProperty("events")
+    private boolean events;
+    @JsonProperty("lineups")
+    private boolean lineups;
+    @JsonProperty("statistics_fixtures")
+    private boolean statistics_fixtures;
+    @JsonProperty("statistics_players")
+    private boolean statistics_players;
 }

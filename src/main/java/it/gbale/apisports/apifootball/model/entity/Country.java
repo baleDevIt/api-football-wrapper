@@ -6,7 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-public class Countries implements Serializable {
+public class Country implements Serializable {
 
     @JsonProperty("name")
     private String name;
