@@ -71,4 +71,15 @@ public class ApiFootball {
         }
     }
 
+    public LeaguesApi leaguesApi(){
+        if(instancePool.containsKey(LeaguesApi.class)){
+            return (LeaguesApi)  instancePool.get(LeaguesApi.class);
+        }
+        else{
+            LeaguesApi leaguesApi = new LeaguesApi(requestFactory);
+            instancePool.put(LeaguesApi.class, leaguesApi);
+            return leaguesApi;
+        }
+    }
+
 }

@@ -5,6 +5,8 @@ import static it.gbale.apisports.utils.Validation.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import it.gbale.apisports.apifootball.adapter.LocalDateTypeAdapter;
+import it.gbale.apisports.apifootball.adapter.YearTypeAdapter;
 import it.gbale.apisports.apifootball.adapter.ZoneIdTypeAdapter;
 import it.gbale.apisports.apifootball.model.core.ApiResponse;
 import it.gbale.apisports.apifootball.model.exception.ApiError;
@@ -26,6 +28,8 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.time.Year;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +63,8 @@ final class RequestFactory {
         this.headerToken = new BasicHeader(RAPIDAPI_HEADER_KEY, activeToken);
         this.gson = new GsonBuilder()
                 .registerTypeAdapter(ZoneId.class, new ZoneIdTypeAdapter())
+                .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                .registerTypeAdapter(Year.class, new YearTypeAdapter())
                 .create();
         this.client = HttpClients.createDefault();
     }
@@ -86,15 +92,14 @@ final class RequestFactory {
         try {
             HttpGet request = buildRequest(terminalEndpoint,parameterAdapter(parameters));
             return client.execute(request, response -> {
-                StringBuilder sb = new StringBuilder("Make Request ").append(request.getMethod()).append(response.getStatusLine().getStatusCode()).append(request.getURI());
-                logger.info(sb);
                 if(response.getStatusLine().getStatusCode() == 200){
                     Type collectionType = TypeToken.getParameterized(ApiResponse.class, someClass).getType();
                     Reader json = new InputStreamReader(response.getEntity().getContent());
                     ApiResponse<T> objResp = gson.fromJson(json, collectionType);
                     if(objResp.getErrors().size() > 0){
-                        StringBuffer exepBuffer = new StringBuffer("Exception in request ");
+                        StringBuffer exepBuffer = new StringBuffer();
                         objResp.getErrors().forEach((key, value) -> exepBuffer.append(key).append(" ").append(value));
+                        logger.error(exepBuffer);
                         throw new ApiError(exepBuffer.toString());
                     }
                     return objResp;
