@@ -1,7 +1,7 @@
 package it.gbale.apisports.apifootball;
 
 import it.gbale.apisports.apifootball.model.core.ApiResponse;
-import it.gbale.apisports.apifootball.model.entity.Countries;
+import it.gbale.apisports.apifootball.model.entity.Country;
 import it.gbale.apisports.apifootball.model.exception.InvalidParamsException;
 import it.gbale.apisports.apifootball.model.parameterEnum.CountryCode;
 import it.gbale.apisports.apifootball.model.parameterEnum.CountriesParams;
@@ -27,16 +27,16 @@ class CountriesApiTest {
     @Tag("ApiCall")
     @Test
     void getAllRequestSuccess(){
-        List<Countries> countriesList =  apiFootball.countriesApi().getAll();
+        List<Country> countriesList =  apiFootball.countriesApi().getAll();
         assertNotNull(countriesList);
         assertTrue(countriesList.size() > 0);
-        assertInstanceOf(Countries.class, countriesList.get(0));
+        assertInstanceOf(Country.class, countriesList.get(0));
     }
 
     @Tag("ApiCall")
     @Test
     void findCountriesRequestSuccess(){
-        List<Countries> countriesList;
+        List<Country> countriesList;
         Map<CountriesParams, String> paramsStringMap = new HashMap<>();
         paramsStringMap.put(CountriesParams.CODE, CountryCode.IT.name());
         try {
@@ -46,13 +46,13 @@ class CountriesApiTest {
         }
         assertNotNull(countriesList);
         assertEquals(countriesList.size(),1);
-        assertInstanceOf(Countries.class, countriesList.get(0));
+        assertInstanceOf(Country.class, countriesList.get(0));
     }
 
     @Tag("ApiCall")
     @Test
     void findCountriesRequestWithCodeParameterNotValid(){
-        List<Countries> countriesList;
+        List<Country> countriesList;
         Map<CountriesParams, String> paramsStringMap = new HashMap<>();
         paramsStringMap.put(CountriesParams.CODE, "GG");
         try {
@@ -68,10 +68,10 @@ class CountriesApiTest {
     @Tag("ApiCall")
     @Test
     void findCountriesByNameRequestSuccess(){
-        List<Countries> countriesList = apiFootball.countriesApi().findCountriesByName("Italy");
+        List<Country> countriesList = apiFootball.countriesApi().findCountriesByName("Italy");
         assertNotNull(countriesList);
         assertEquals(countriesList.size(),1);
-        assertInstanceOf(Countries.class, countriesList.get(0));
+        assertInstanceOf(Country.class, countriesList.get(0));
     }
 
     @Test
@@ -101,11 +101,11 @@ class CountriesApiTest {
     @Tag("ApiCall")
     @Test
     void getResponseRequestSuccess(){
-        ApiResponse<Countries> response =  apiFootball.countriesApi().getResponse();
+        ApiResponse<Country> response =  apiFootball.countriesApi().getResponse();
         assertNotNull(response);
         assertNotEquals(response.getResponse().size(),0);
         assertEquals(response.getErrors().size(),0);
-        response.getResponse().forEach(value -> assertInstanceOf(Countries.class, value));
+        response.getResponse().forEach(value -> assertInstanceOf(Country.class, value));
     }
 
 }

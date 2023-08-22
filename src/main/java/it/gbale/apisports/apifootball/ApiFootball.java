@@ -82,4 +82,15 @@ public class ApiFootball {
         }
     }
 
+    public FixturesApi fixturesApi(){
+        if(instancePool.containsKey(FixturesApi.class)){
+            return (FixturesApi)  instancePool.get(FixturesApi.class);
+        }
+        else{
+            FixturesApi fixturesApi = new FixturesApi(requestFactory);
+            instancePool.put(FixturesApi.class, fixturesApi);
+            return fixturesApi;
+        }
+    }
+
 }

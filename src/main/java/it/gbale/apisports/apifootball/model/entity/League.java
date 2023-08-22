@@ -24,7 +24,7 @@ public class League implements Serializable {
     private URI logo;
 
     @JsonProperty("country")
-    Countries country;
+    Country country;
 
     @JsonProperty("seasons")
     List<Season> seasons;

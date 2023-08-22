@@ -5,9 +5,7 @@ import static it.gbale.apisports.utils.Validation.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import it.gbale.apisports.apifootball.adapter.LocalDateTypeAdapter;
-import it.gbale.apisports.apifootball.adapter.YearTypeAdapter;
-import it.gbale.apisports.apifootball.adapter.ZoneIdTypeAdapter;
+import it.gbale.apisports.apifootball.adapter.*;
 import it.gbale.apisports.apifootball.model.core.ApiResponse;
 import it.gbale.apisports.apifootball.model.exception.ApiError;
 import it.gbale.apisports.apifootball.model.parameterEnum.BaseParams;
@@ -28,9 +26,7 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.LocalDate;
-import java.time.Year;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +61,8 @@ final class RequestFactory {
                 .registerTypeAdapter(ZoneId.class, new ZoneIdTypeAdapter())
                 .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
                 .registerTypeAdapter(Year.class, new YearTypeAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
                 .create();
         this.client = HttpClients.createDefault();
     }
