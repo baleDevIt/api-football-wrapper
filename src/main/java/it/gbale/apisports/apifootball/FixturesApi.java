@@ -61,4 +61,11 @@ public class FixturesApi extends BaseApi {
         return requestFactory.makeRequest(ENDPOINT, parametersRequest, Fixture.class);
     }
 
+    /**
+     * Return all live fixtures games
+     */
+    public List<Fixture> getAllLiveFixture(){
+        return getResponse(makeParams(FixtureParams.LIVE, "all")).getResponse();
+    }
+
 }

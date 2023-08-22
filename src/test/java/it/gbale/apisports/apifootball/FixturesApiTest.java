@@ -50,6 +50,12 @@ class FixturesApiTest extends GenericTest<Fixture> {
     }
 
     @Test
+    void getAllLiveFixtureRequestSuccess() {
+        List<Fixture> response = apiFootball.fixturesApi().getAllLiveFixture();
+        this.testListObjSuccess(response, Fixture.class);
+    }
+
+    @Test
     void getResponseRequestSuccess() {
         Map<FixtureParams,String> parameters = new HashMap<>();
         parameters.put(FixtureParams.TIMEZONE, TimeZone.getDefault().toString());
