@@ -6,8 +6,8 @@ import it.gbale.apisports.apifootball.model.exception.InvalidParamsException;
 import it.gbale.apisports.apifootball.model.parameterEnum.CountryCode;
 import it.gbale.apisports.apifootball.model.parameterEnum.CountriesParams;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,10 +21,12 @@ class CountriesApiTest {
 
     @BeforeAll
     static void setup() {
-        apiFootball = new ApiFootball(System.getenv("SERVICETOKEN"));
+        if(System.getenv("SERVICETOKEN") != null){
+            apiFootball = new ApiFootball(System.getenv("SERVICETOKEN"));
+        }
     }
 
-    @Tag("ApiCall")
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     @Test
     void getAllRequestSuccess(){
         List<Country> countriesList =  apiFootball.countriesApi().getAll();
@@ -33,7 +35,7 @@ class CountriesApiTest {
         assertInstanceOf(Country.class, countriesList.get(0));
     }
 
-    @Tag("ApiCall")
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     @Test
     void findCountriesRequestSuccess(){
         List<Country> countriesList;
@@ -49,7 +51,7 @@ class CountriesApiTest {
         assertInstanceOf(Country.class, countriesList.get(0));
     }
 
-    @Tag("ApiCall")
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     @Test
     void findCountriesRequestWithCodeParameterNotValid(){
         List<Country> countriesList;
@@ -65,7 +67,7 @@ class CountriesApiTest {
     }
 
 
-    @Tag("ApiCall")
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     @Test
     void findCountriesByNameRequestSuccess(){
         List<Country> countriesList = apiFootball.countriesApi().findCountriesByName("Italy");
@@ -75,30 +77,35 @@ class CountriesApiTest {
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findCountriesByNameRequestWithEmptyParams(){
         assertThrows(IllegalArgumentException.class, () -> apiFootball.countriesApi().findCountriesByName(""));
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findCountriesByNameRequestWithNullParams(){
         assertThrows(IllegalArgumentException.class, () -> apiFootball.countriesApi().findCountriesByName(null));
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findCountriesByCodeRequestWithNullParams(){
         assertThrows(IllegalArgumentException.class, () -> apiFootball.countriesApi().findCountriesByCode(null));
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findCountriesBySearchRequestWithNullParams(){
         assertThrows(IllegalArgumentException.class, () -> apiFootball.countriesApi().findCountriesBySearch(null));
     }
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findCountriesBySearchRequestWithEmptyParams(){
         assertThrows(IllegalArgumentException.class, () -> apiFootball.countriesApi().findCountriesBySearch(""));
     }
 
-    @Tag("ApiCall")
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     @Test
     void getResponseRequestSuccess(){
         ApiResponse<Country> response =  apiFootball.countriesApi().getResponse();

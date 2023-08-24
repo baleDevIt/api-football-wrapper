@@ -70,6 +70,7 @@ public class LeaguesApi extends BaseApi{
     }
 
     public List<League> getAllLeague(){
+        //TODO: Rename method
         return requestFactory.makeRequest(ENDPOINT, makeParams(LeaguesParams.TYPE, "League"), League.class).getResponse();
     }
 

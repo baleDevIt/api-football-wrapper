@@ -49,8 +49,9 @@ final class RequestFactory {
 
 
     RequestFactory(String activeToken, boolean isApiSportsEndpoint) {
-        _assertNotNullorEmpty(activeToken);
-
+        if(!_isNotNullorEmpty(activeToken)){
+            throw new ApiError("Token is mandatory");
+        }
         if(isApiSportsEndpoint){
             this.activeEndpoint = APISPORTS_URL;
         }else{
