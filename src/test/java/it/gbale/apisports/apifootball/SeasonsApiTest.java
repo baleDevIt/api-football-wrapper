@@ -2,8 +2,8 @@ package it.gbale.apisports.apifootball;
 
 import it.gbale.apisports.apifootball.model.core.ApiResponse;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import java.util.List;
 
@@ -16,11 +16,13 @@ class SeasonsApiTest {
 
     @BeforeAll
     static void setup() {
-        apiFootball = new ApiFootball(System.getenv("SERVICETOKEN"));
+        if(System.getenv("SERVICETOKEN") != null){
+            apiFootball = new ApiFootball(System.getenv("SERVICETOKEN"));
+        }
     }
 
-    @Tag("ApiCall")
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void getAll_withRequestSuccess(){
         List<String> stringList =  apiFootball.seasonsApi().getAll_withRequest();
         assertNotNull(stringList);
@@ -28,8 +30,8 @@ class SeasonsApiTest {
         stringList.forEach(value -> assertInstanceOf(String.class, value));
     }
 
-    @Tag("ApiCall")
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void getResponseRequestSuccess(){
         ApiResponse<String> response =  apiFootball.seasonsApi().getResponse();
         assertNotNull(response);
@@ -40,6 +42,7 @@ class SeasonsApiTest {
 
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void getAllRequestSuccess(){
         List<String> stringList =  apiFootball.seasonsApi().getAll();
         assertNotNull(stringList);
@@ -48,6 +51,7 @@ class SeasonsApiTest {
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void getAllRequestListIsUnmodificable(){
         assertThrows(UnsupportedOperationException.class, () -> {
             List<String> stringList =  apiFootball.seasonsApi().getAll();
@@ -56,6 +60,7 @@ class SeasonsApiTest {
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void getActualSeasonSuccess(){
         assertEquals(apiFootball.seasonsApi().getActualSeason(), "2023");
     }

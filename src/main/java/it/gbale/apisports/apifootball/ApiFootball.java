@@ -3,7 +3,6 @@ package it.gbale.apisports.apifootball;
 import java.util.HashMap;
 import java.util.Map;
 
-import static it.gbale.apisports.utils.Validation.*;
 
 /**
  * Wrapper entry class for Football Api
@@ -21,7 +20,6 @@ public class ApiFootball {
      * altrimenti l'endpoint utilizzato nelle chiamate sarà @see <a href="https://api-football-v1.p.rapidapi.com/v3/">api-football-v1.p.rapidapi.com</a>
      */
     public ApiFootball(String token, boolean isApiSportsEndpoint) {
-        _assertNotNullorEmpty(token);
         if(isApiSportsEndpoint){
             this.requestFactory = new RequestFactory(token, true);
         }else{

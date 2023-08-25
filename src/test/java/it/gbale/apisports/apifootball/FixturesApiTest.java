@@ -7,6 +7,7 @@ import it.gbale.apisports.apifootball.model.entity.Season;
 import it.gbale.apisports.apifootball.model.parameterEnum.FixtureParams;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import java.time.LocalDate;
 import java.time.Year;
@@ -28,7 +29,9 @@ class FixturesApiTest extends GenericTest<Fixture> {
 
     @BeforeAll
     static void setup() {
-        apiFootball = new ApiFootball(System.getenv("SERVICETOKEN"));
+        if(System.getenv("SERVICETOKEN") != null){
+            apiFootball = new ApiFootball(System.getenv("SERVICETOKEN"));
+        }
         league = new League();
         league.setId("135");
         league.setName("Serie A");
@@ -38,24 +41,28 @@ class FixturesApiTest extends GenericTest<Fixture> {
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findFixtureByRoundRequestSuccess() {
         List<Fixture> response = apiFootball.fixturesApi().findFixtureByRound(ZoneId.of("Europe/Rome"),"Regular Season - 2",season,league);
         this.testListObjSuccess(response, Fixture.class);
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findFixturesRequestSuccess() {
         List<Fixture> response = apiFootball.fixturesApi().findFixtures(ZoneId.of("Europe/Rome"), LocalDate.now().minusDays(3), LocalDate.now(),season, league);
         this.testListObjSuccess(response, Fixture.class);
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void getAllLiveFixtureRequestSuccess() {
         List<Fixture> response = apiFootball.fixturesApi().getAllLiveFixture();
         this.testListObjSuccess(response, Fixture.class);
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void getResponseRequestSuccess() {
         Map<FixtureParams,String> parameters = new HashMap<>();
         parameters.put(FixtureParams.TIMEZONE, TimeZone.getDefault().toString());
@@ -68,6 +75,7 @@ class FixturesApiTest extends GenericTest<Fixture> {
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findFixturesWithParamsMapRequestSuccess() {
         Map<FixtureParams,String> parameters = new HashMap<>();
         parameters.put(FixtureParams.TIMEZONE, TimeZone.getDefault().toString());

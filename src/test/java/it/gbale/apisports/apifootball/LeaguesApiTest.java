@@ -6,8 +6,8 @@ import it.gbale.apisports.apifootball.model.entity.Team;
 import it.gbale.apisports.apifootball.model.exception.ApiError;
 import it.gbale.apisports.apifootball.model.parameterEnum.LeaguesParams;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import java.time.Year;
 import java.util.HashMap;
@@ -23,32 +23,34 @@ class LeaguesApiTest extends GenericTest<League> {
 
     @BeforeAll
     static void setup() {
-        apiFootball = new ApiFootball(System.getenv("SERVICETOKEN"));
+        if(System.getenv("SERVICETOKEN") != null){
+            apiFootball = new ApiFootball(System.getenv("SERVICETOKEN"));
+        }
         team = new Team();
         team.setId(33);
         team.setName("Manchester United");
         team.setCode("MUN");
     }
-    @Tag("ApiCall")
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     @Test
     void getAllCurrentLeaguesSuccess(){
         testListObjSuccess(apiFootball.leaguesApi().getAllCurrentLeagues(), League.class) ;
     }
 
-    @Tag("ApiCall")
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     @Test
     void getAllRequestSuccess(){
         testListObjSuccess(apiFootball.leaguesApi().getAllLeagues(), League.class);
     }
 
-    @Tag("ApiCall")
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     @Test
     void getResponseSuccess(){
         testResponseObjSuccess(apiFootball.leaguesApi().getResponse(),League.class);
 
     }
 
-    @Tag("ApiCall")
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     @Test
     void findLeaguesRequestSuccess(){
         Map<LeaguesParams, String> paramsStringMap = new HashMap<>();
@@ -59,7 +61,7 @@ class LeaguesApiTest extends GenericTest<League> {
         leagues.forEach(element -> assertInstanceOf(League.class, element));
     }
 
-    @Tag("ApiCall")
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     @Test
     void findCountriesRequestWithCodeParameterNotValid(){
         Map<LeaguesParams, String> paramsStringMap = new HashMap<>();
@@ -68,56 +70,67 @@ class LeaguesApiTest extends GenericTest<League> {
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findLeaguesAtSeasonRequestWithNullYearValue(){
         assertThrows(IllegalArgumentException.class, () -> apiFootball.leaguesApi().findLeaguesAtSeason((Year) null));
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findLeaguesAtSeasonRequestWithNullSeasonValue(){
         assertThrows(IllegalArgumentException.class, () -> apiFootball.leaguesApi().findLeaguesAtSeason((Season) null));
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findLeaguesAtSeasonRequestActualYear(){
         testListObjSuccess(apiFootball.leaguesApi().findLeaguesAtSeason(Year.now()), League.class);
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findLeaguesRequest(){
         testListObjSuccess(apiFootball.leaguesApi().searchLeagues("Serie A"), League.class);
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findLeaguesRequestWithInexistentLeagues(){
         testEmptyListObj(apiFootball.leaguesApi().searchLeagues("LaMiaStagionePreferita"), League.class);
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void getAllLeagueRequestSuccess(){
         testListObjSuccess(apiFootball.leaguesApi().getAllLeague(), League.class);
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void getAllCupRequestSuccess(){
         testListObjSuccess(apiFootball.leaguesApi().getAllCup(), League.class);
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findLeaguesByNameRequestSuccess(){
         testListObjSuccess(apiFootball.leaguesApi().findLeaguesByName("Serie A"), League.class);
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findLeaguesByNameRequestWithInexistentLeagues(){
         testEmptyListObj(apiFootball.leaguesApi().findLeaguesByName("LaMiaStagionePreferita"), League.class);
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findLeaguesByTeamRequestSuccess(){
         testListObjSuccess(apiFootball.leaguesApi().findLeaguesByTeam(team), League.class);
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findLeaguesByTeamRequestWithInexistentTeam(){
         assertThrows(ApiError.class, () -> apiFootball.leaguesApi().findLeaguesByTeam(new Team()));
     }

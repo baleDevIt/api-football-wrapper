@@ -2,8 +2,8 @@ package it.gbale.apisports.apifootball;
 
 import it.gbale.apisports.apifootball.model.core.ApiResponse;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 
 import java.time.ZoneId;
 import java.util.List;
@@ -16,11 +16,13 @@ class TimezoneApiTest {
 
     @BeforeAll
     static void setup() {
-        apiFootball = new ApiFootball(System.getenv("SERVICETOKEN"));
+        if(System.getenv("SERVICETOKEN") != null){
+            apiFootball = new ApiFootball(System.getenv("SERVICETOKEN"));
+        }
     }
 
-    @Tag("ApiCall")
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void getAllRequestSuccess(){
         List<String> stringList =  apiFootball.timezoneApi().getAll_withRequest();
         assertNotNull(stringList);
@@ -28,8 +30,8 @@ class TimezoneApiTest {
         stringList.forEach(value -> assertInstanceOf(String.class, value));
     }
 
-    @Tag("ApiCall")
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void getResponseRequestSuccess(){
         ApiResponse<String> stringList =  apiFootball.timezoneApi().getResponse();
         assertNotNull(stringList);
@@ -38,8 +40,8 @@ class TimezoneApiTest {
         stringList.getResponse().forEach(value -> assertInstanceOf(String.class, value));
     }
 
-    @Tag("ApiCall")
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void getAllTimezonesRequestSuccess(){
         List<ZoneId> zoneIds =  apiFootball.timezoneApi().getAllTimezone_withRequest();
         assertNotNull(zoneIds);
@@ -48,6 +50,7 @@ class TimezoneApiTest {
     }
 
     @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void getAllZoneIdsRequestSuccess(){
         List<ZoneId> zoneIds =  apiFootball.timezoneApi().getAllZoneIds();
         assertNotNull(zoneIds);

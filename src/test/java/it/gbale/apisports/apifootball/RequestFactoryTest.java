@@ -1,5 +1,6 @@
 package it.gbale.apisports.apifootball;
 
+import it.gbale.apisports.apifootball.model.exception.ApiError;
 import org.apache.http.client.methods.HttpGet;
 import org.junit.jupiter.api.Test;
 
@@ -9,17 +10,17 @@ class RequestFactoryTest {
 
     @Test
     void classCreationWithoutTokenNotPossibile() {
-        assertThrows(IllegalArgumentException.class, () -> new RequestFactory(null, true));
+        assertThrows(ApiError.class, () -> new RequestFactory(null, true));
     }
 
     @Test
     void classCreationWithEmptyTokenNotPossibile() {
-        assertThrows(IllegalArgumentException.class, () -> new ApiFootball("", true));
+        assertThrows(ApiError.class, () -> new ApiFootball("", true));
     }
 
     @Test
     void makeRequestWithout() {
-        assertThrows(IllegalArgumentException.class, () -> new ApiFootball("", true));
+        assertThrows(ApiError.class, () -> new ApiFootball("", true));
     }
 
     @Test
