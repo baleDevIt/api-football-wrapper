@@ -1,6 +1,6 @@
 package it.gbale.apisports.apifootball.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,16 +10,16 @@ import java.time.Year;
 @Data
 public class Season implements Serializable {
 
-    @JsonProperty("year")
+    @SerializedName("year")
     private Year year;
 
-    @JsonProperty("start")
+    @SerializedName("start")
     private LocalDate start;
-    @JsonProperty("end")
+    @SerializedName("end")
     private LocalDate end;
-    @JsonProperty("current")
+    @SerializedName("current")
     private boolean current;
-    @JsonProperty("coverage")
+    @SerializedName("coverage")
     private Coverage coverage;
 
 }

@@ -1,6 +1,6 @@
 package it.gbale.apisports.apifootball.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,23 +8,23 @@ import java.io.Serializable;
 @Data
 public class Coverage implements Serializable {
 
-    @JsonProperty("fixtures")
+    @SerializedName("fixtures")
     private CoverageFixture fixtures;
-    @JsonProperty("standings")
+    @SerializedName("standings")
     private boolean standings;
-    @JsonProperty("players")
+    @SerializedName("players")
     private boolean players;
-    @JsonProperty("top_scorers")
+    @SerializedName("top_scorers")
     private boolean topScorers;
-    @JsonProperty("top_assists")
+    @SerializedName("top_assists")
     private boolean topAssists;
-    @JsonProperty("top_cards")
+    @SerializedName("top_cards")
     private boolean topCards;
-    @JsonProperty("injuries")
+    @SerializedName("injuries")
     private boolean injuries;
-    @JsonProperty("predictions")
+    @SerializedName("predictions")
     private boolean predictions;
-    @JsonProperty("odds")
+    @SerializedName("odds")
     private boolean odds;
 
 }
@@ -32,12 +32,12 @@ public class Coverage implements Serializable {
 @Data
 class CoverageFixture implements Serializable  {
 
-    @JsonProperty("events")
+    @SerializedName("events")
     private boolean events;
-    @JsonProperty("lineups")
+    @SerializedName("lineups")
     private boolean lineups;
-    @JsonProperty("statistics_fixtures")
+    @SerializedName("statistics_fixtures")
     private boolean statistics_fixtures;
-    @JsonProperty("statistics_players")
+    @SerializedName("statistics_players")
     private boolean statistics_players;
 }

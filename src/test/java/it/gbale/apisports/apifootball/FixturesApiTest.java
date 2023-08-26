@@ -3,6 +3,7 @@ package it.gbale.apisports.apifootball;
 import it.gbale.apisports.apifootball.model.core.ApiResponse;
 import it.gbale.apisports.apifootball.model.entity.Fixture;
 import it.gbale.apisports.apifootball.model.entity.League;
+import it.gbale.apisports.apifootball.model.entity.LeagueInfo;
 import it.gbale.apisports.apifootball.model.entity.Season;
 import it.gbale.apisports.apifootball.model.parameterEnum.FixtureParams;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,8 +34,9 @@ class FixturesApiTest extends GenericTest<Fixture> {
             apiFootball = new ApiFootball(System.getenv("SERVICETOKEN"));
         }
         league = new League();
-        league.setId("135");
-        league.setName("Serie A");
+        league.setLeagueInfo(new LeagueInfo());
+        league.getLeagueInfo().setId("135");
+        league.getLeagueInfo().setName("Serie A");
 
         season = new Season();
         season.setYear(Year.now());
@@ -69,7 +71,7 @@ class FixturesApiTest extends GenericTest<Fixture> {
         parameters.put(FixtureParams.FROM, LocalDate.now().minusDays(3).format(formatter));
         parameters.put(FixtureParams.TO, LocalDate.now().format(formatter));
         parameters.put(FixtureParams.SEASON, season.getYear().toString());
-        parameters.put(FixtureParams.LEAGUE, league.getId());
+        parameters.put(FixtureParams.LEAGUE, league.getLeagueInfo().getId());
         ApiResponse<Fixture> response = apiFootball.fixturesApi().getResponse(parameters);
         this.testResponseObjSuccess(response, Fixture.class);
     }
@@ -82,7 +84,7 @@ class FixturesApiTest extends GenericTest<Fixture> {
         parameters.put(FixtureParams.FROM, LocalDate.now().minusDays(3).format(formatter));
         parameters.put(FixtureParams.TO, LocalDate.now().format(formatter));
         parameters.put(FixtureParams.SEASON, season.getYear().toString());
-        parameters.put(FixtureParams.LEAGUE, league.getId());
+        parameters.put(FixtureParams.LEAGUE, league.getLeagueInfo().getId());
         List<Fixture> response = apiFootball.fixturesApi().findFixtures(parameters);
         this.testListObjSuccess(response, Fixture.class);
     }

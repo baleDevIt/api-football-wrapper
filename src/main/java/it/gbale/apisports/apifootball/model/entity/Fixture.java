@@ -1,6 +1,6 @@
 package it.gbale.apisports.apifootball.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -14,17 +14,17 @@ import java.util.Map;
 @Data
 public class Fixture implements Serializable {
 
-    @JsonProperty("id")
+    @SerializedName("id")
     private Integer id;
 
-    @JsonProperty("referee")
+    @SerializedName("referee")
     private String referee;
-    @JsonProperty("timezone")
+    @SerializedName("timezone")
     private String timezone;
 
-    @JsonProperty("date")
+    @SerializedName("date")
     private LocalDateTime date;
-    @JsonProperty("timestamp")
+    @SerializedName("timestamp")
     private Instant timestamp;
 
     // Periods
@@ -43,23 +43,23 @@ public class Fixture implements Serializable {
 
     //League
     private GameLeague league;
-    @JsonProperty("teams")
+    @SerializedName("teams")
     private GameTeams teams;
     //Goals
-    @JsonProperty("goals")
+    @SerializedName("goals")
     private GameResult goals;
 
-    @JsonProperty("score")
+    @SerializedName("score")
     private GameScore score;
 
-    @JsonProperty("periods")
+    @SerializedName("periods")
     @SuppressWarnings("unused")
     private void setterPeriodsNestedObject(Map<String, String> periods) {
         this.firstPeriod = Timestamp.valueOf(periods.getOrDefault("first", null));
         this.secondPeriod = Timestamp.valueOf(periods.getOrDefault("second", null));
     }
 
-    @JsonProperty("venue")
+    @SerializedName("venue")
     @SuppressWarnings("unused")
     private void setterVenueNestedObject(Map<String, String> venue) {
         this.venueId = Integer.valueOf(venue.getOrDefault("id", "0"));
@@ -67,7 +67,7 @@ public class Fixture implements Serializable {
         this.venueCity = venue.getOrDefault("city", null);
     }
 
-    @JsonProperty("status")
+    @SerializedName("status")
     @SuppressWarnings("unused")
     private void setterStatusNestedObject(Map<String, String> status) {
         this.statusTimeElapsed = Integer.valueOf(status.getOrDefault("elapsed", "0"));
@@ -92,7 +92,7 @@ class GameTeams{
     private URI teamAwayLogo;
     private boolean teamAwayWinner;
 
-    @JsonProperty("home")
+    @SerializedName("home")
     @SuppressWarnings("unused")
     private void setterHomeTeamNestedObject(Map<String, String> status) {
         this.teamHomeId = Integer.valueOf(status.getOrDefault("id", "0"));
@@ -101,7 +101,7 @@ class GameTeams{
         this.teamHomeWinner = Boolean.valueOf(status.getOrDefault("short", "false"));
     }
 
-    @JsonProperty("away")
+    @SerializedName("away")
     @SuppressWarnings("unused")
     private void setterAwayTeamNestedObject(Map<String, String> status) {
         this.teamAwayId = Integer.valueOf(status.getOrDefault("id", "0"));
@@ -115,13 +115,13 @@ class GameTeams{
 @Data
 class GameScore{
 
-    @JsonProperty("halftime")
+    @SerializedName("halftime")
     private GameResult halftime;
-    @JsonProperty("fulltime")
+    @SerializedName("fulltime")
     private GameResult fulltime;
-    @JsonProperty("extratime")
+    @SerializedName("extratime")
     private GameResult extratime;
-    @JsonProperty("penalty")
+    @SerializedName("penalty")
     private GameResult penalty;
 
 
@@ -129,19 +129,19 @@ class GameScore{
 
 @Data
 class GameLeague {
-    @JsonProperty("id")
+    @SerializedName("id")
     private Integer id;
-    @JsonProperty("name")
+    @SerializedName("name")
     private String name;
-    @JsonProperty("country")
+    @SerializedName("country")
     private String country;
-    @JsonProperty("logo")
+    @SerializedName("logo")
     private URI logo;
-    @JsonProperty("flag")
+    @SerializedName("flag")
     private URI flag;
-    @JsonProperty("season")
+    @SerializedName("season")
     private Year season;
-    @JsonProperty("round")
+    @SerializedName("round")
     private String round;
 
 
@@ -149,9 +149,9 @@ class GameLeague {
 
 @Data
 class GameResult{
-    @JsonProperty("home")
+    @SerializedName("home")
     private Integer home;
-    @JsonProperty("away")
+    @SerializedName("away")
     private Integer away;
 }
 

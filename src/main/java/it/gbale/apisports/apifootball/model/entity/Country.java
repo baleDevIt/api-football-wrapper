@@ -1,6 +1,6 @@
 package it.gbale.apisports.apifootball.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -8,10 +8,10 @@ import java.io.Serializable;
 @Data
 public class Country implements Serializable {
 
-    @JsonProperty("name")
+    @SerializedName("name")
     private String name;
-    @JsonProperty("code")
+    @SerializedName("code")
     private String code;
-    @JsonProperty("flag")
+    @SerializedName("flag")
     private String flag;
 }
