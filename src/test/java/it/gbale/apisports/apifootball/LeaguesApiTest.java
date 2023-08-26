@@ -134,4 +134,14 @@ class LeaguesApiTest extends GenericTest<League> {
     void findLeaguesByTeamRequestWithInexistentTeam(){
         assertThrows(ApiError.class, () -> apiFootball.leaguesApi().findLeaguesByTeam(new Team()));
     }
+
+    @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
+    void checkBasicInformationInLeagueEntity(){
+        List<League> allLeague = apiFootball.leaguesApi().getAllLeague();
+        assertNotNull(allLeague.get(0).getLeagueInfo().getId(), "League getId is null");
+        assertNotNull(allLeague.get(0).getLeagueInfo().getLogo(), "League getLogo is null");
+        assertNotNull(allLeague.get(0).getLeagueInfo().getName(), "League getName is null");
+        assertNotNull(allLeague.get(0).getLeagueInfo().getType(), "League getType is null");
+    }
 }

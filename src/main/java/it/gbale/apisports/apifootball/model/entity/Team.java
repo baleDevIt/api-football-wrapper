@@ -1,6 +1,6 @@
 package it.gbale.apisports.apifootball.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.net.URI;
@@ -9,20 +9,20 @@ import java.time.Year;
 @Data
 public class Team {
 
-    @JsonProperty("id")
+    @SerializedName("id")
     private Integer id;
-    @JsonProperty("name")
+    @SerializedName("name")
     private String name;
 
-    @JsonProperty("code")
+    @SerializedName("code")
     private String code;
-    @JsonProperty("country")
+    @SerializedName("country")
     private String country;
-    @JsonProperty("founded")
+    @SerializedName("founded")
     private Year founded;
-    @JsonProperty("national")
+    @SerializedName("national")
     private boolean national;
-    @JsonProperty("logo")
+    @SerializedName("logo")
     private URI logo;
 
     //TODO: Controllare se integrare l'oggetto Venue
