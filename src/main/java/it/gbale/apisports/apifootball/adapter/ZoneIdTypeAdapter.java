@@ -2,6 +2,7 @@ package it.gbale.apisports.apifootball.adapter;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
@@ -18,8 +19,14 @@ public class ZoneIdTypeAdapter extends TypeAdapter<ZoneId> {
     }
 
     @Override
-    public ZoneId read(JsonReader in) throws IOException {
-        String id = in.nextString();
+    public ZoneId read(JsonReader jsonReader) throws IOException {
+        String id;
+        if (jsonReader.peek() == JsonToken.NULL) {
+            jsonReader.nextNull();
+            return null;
+        }
+
+        id = jsonReader.nextString();
         try {
             return ZoneId.of(id);
         }catch (Exception e){
