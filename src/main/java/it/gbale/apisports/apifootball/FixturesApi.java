@@ -13,9 +13,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static it.gbale.apisports.utils.Validation._assertNotNull;
 
+@SuppressWarnings("unused")
 public class FixturesApi extends BaseApi {
 
     private static final String ENDPOINT = "fixtures";
@@ -71,9 +73,9 @@ public class FixturesApi extends BaseApi {
     /**
      * Return a specific Fixture by id
      */
-    public List<Fixture> findFixturebyId(Integer id){
+    public Optional<Fixture> findFixturebyId(Integer id){
         _assertNotNull(id);
-        return getResponse(makeParams(FixtureParams.ID, id)).getResponse();
+        return getResponse(makeParams(FixtureParams.ID, id)).getResponse().stream().findFirst();
     }
 
     public List<Fixture> findFixturebyDate(LocalDate localDate){

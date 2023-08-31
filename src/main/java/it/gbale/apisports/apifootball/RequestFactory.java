@@ -64,6 +64,8 @@ final class RequestFactory {
                 .registerTypeAdapter(Year.class, new YearTypeAdapter())
                 .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
                 .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                .registerTypeAdapter(OffsetDateTime.class, new OffsetDayTimeTypeAdapter())
+                .serializeNulls()
                 .create();
         this.client = HttpClients.createDefault();
     }

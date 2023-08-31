@@ -2,6 +2,7 @@ package it.gbale.apisports.apifootball.adapter;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
@@ -18,7 +19,13 @@ public class InstantTypeAdapter extends TypeAdapter<Instant> {
 
     @Override
     public Instant read(JsonReader jsonReader) throws IOException {
-        String instant = jsonReader.nextString();
-        return Instant.parse(instant);
+        String instant;
+        if (jsonReader.peek() == JsonToken.NULL) {
+            jsonReader.nextNull();
+            return null;
+        }else{
+            instant = jsonReader.nextString();
+        }
+        return Instant.ofEpochSecond(Long.parseLong(instant));
     }
 }
