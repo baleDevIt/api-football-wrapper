@@ -104,4 +104,14 @@ class FixturesApiTest extends GenericTest<Fixture> {
         assertNotNull(fixture.getScore(), "Score is null");
         assertNotNull(fixture.getGoals(), "Goals is null");
     }
+
+    @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
+    void findRoundByLeague_RequestSuccess() {
+        List<String> roundsByCurrentLeague = apiFootball.fixturesApi().findRoundsByLeague("2023", "135");
+        assertNotNull(roundsByCurrentLeague);
+        assertNotEquals("", roundsByCurrentLeague.get(0).trim());
+    }
+
+
 }

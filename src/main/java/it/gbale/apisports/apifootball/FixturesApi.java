@@ -16,11 +16,13 @@ import java.util.Map;
 import java.util.Optional;
 
 import static it.gbale.apisports.utils.Validation._assertNotNull;
+import static it.gbale.apisports.utils.Validation._assertNotNullorEmpty;
 
 @SuppressWarnings("unused")
 public class FixturesApi extends BaseApi {
 
-    private static final String ENDPOINT = "fixtures";
+    private static final String FIXTURES = "fixtures";
+    private static final String ROUNDS = FIXTURES+"/rounds";
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private final RequestFactory requestFactory;
@@ -60,7 +62,7 @@ public class FixturesApi extends BaseApi {
 
     public ApiResponse<Fixture> getResponse(Map<? extends BaseParams, String> parametersRequest){
         _assertNotNull(parametersRequest);
-        return requestFactory.makeRequest(ENDPOINT, parametersRequest, Fixture.class);
+        return requestFactory.makeRequest(FIXTURES, parametersRequest, Fixture.class);
     }
 
     /**
@@ -112,6 +114,15 @@ public class FixturesApi extends BaseApi {
         }
         Map<BaseParams, String> params = Map.of(FixtureParams.TEAM, String.valueOf(league), FixtureParams.LAST, String.valueOf(nValueLast));
         return getResponse(params).getResponse();
+    }
+
+
+    /**
+     * Get the rounds for a league or a cup.
+     */
+    public List<String> findRoundsByLeague(String season, String league){
+        _assertNotNullorEmpty(season, league);
+        return requestFactory.makeRequest(ROUNDS, Map.of(FixtureParams.SEASON, season, FixtureParams.LEAGUE, league), String.class).getResponse();
     }
 
 }
