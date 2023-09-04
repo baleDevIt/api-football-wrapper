@@ -1,10 +1,7 @@
 package it.gbale.apisports.apifootball;
 
 import it.gbale.apisports.apifootball.model.core.ApiResponse;
-import it.gbale.apisports.apifootball.model.entity.Fixture;
-import it.gbale.apisports.apifootball.model.entity.League;
-import it.gbale.apisports.apifootball.model.entity.LeagueInfo;
-import it.gbale.apisports.apifootball.model.entity.Season;
+import it.gbale.apisports.apifootball.model.entity.*;
 import it.gbale.apisports.apifootball.model.exception.ApiError;
 import it.gbale.apisports.apifootball.model.parameterEnum.FixtureParams;
 import org.junit.jupiter.api.BeforeAll;
@@ -114,4 +111,19 @@ class FixturesApiTest extends GenericTest<Fixture> {
     }
 
 
+    @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
+    void findHeadToHeadWithNumberOfEvent() {
+        List<Fixture> headToHead = apiFootball.fixturesApi().findHeadToHead("33", "34", 1);
+        testListObjSuccess(headToHead, Fixture.class);
+        assertEquals(1, headToHead.size());
+    }
+
+    @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
+    void findHeadToHead() {
+        List<Fixture> headToHead = apiFootball.fixturesApi().findHeadToHead("33", "34");
+        testListObjSuccess(headToHead, Fixture.class);
+        assertNotEquals(1, headToHead.size());
+    }
 }

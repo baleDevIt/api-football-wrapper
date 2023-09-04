@@ -4,6 +4,7 @@ import it.gbale.apisports.apifootball.model.core.ApiResponse;
 import it.gbale.apisports.apifootball.model.entity.Fixture;
 import it.gbale.apisports.apifootball.model.entity.League;
 import it.gbale.apisports.apifootball.model.entity.Season;
+import it.gbale.apisports.apifootball.model.entity.Team;
 import it.gbale.apisports.apifootball.model.parameterEnum.BaseParams;
 import it.gbale.apisports.apifootball.model.parameterEnum.FixtureParams;
 
@@ -23,6 +24,7 @@ public class FixturesApi extends BaseApi {
 
     private static final String FIXTURES = "fixtures";
     private static final String ROUNDS = FIXTURES+"/rounds";
+    private static final String HEADTOHEAD = FIXTURES+"/headtohead";
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private final RequestFactory requestFactory;
@@ -125,4 +127,29 @@ public class FixturesApi extends BaseApi {
         return requestFactory.makeRequest(ROUNDS, Map.of(FixtureParams.SEASON, season, FixtureParams.LEAGUE, league), String.class).getResponse();
     }
 
+    /**
+     * Get heads to heads between two teams.
+     */
+    public List<Fixture> findHeadToHead(String firstIdTeam, String secondIdTeam, Integer numberOfEvent){
+        _assertNotNullorEmpty(firstIdTeam, secondIdTeam);
+        String h2hParam = firstIdTeam + "-" + secondIdTeam;
+        if(numberOfEvent == null){
+            return requestFactory.makeRequest(HEADTOHEAD, Map.of(FixtureParams.H2H, h2hParam), Fixture.class).getResponse();
+        }
+        return requestFactory.makeRequest(HEADTOHEAD, Map.of(FixtureParams.H2H, h2hParam, FixtureParams.LAST, String.valueOf(numberOfEvent)), Fixture.class).getResponse();
+    }
+
+    public List<Fixture> findHeadToHead(String firstIdTeam, String secondIdTeam){
+        return this.findHeadToHead(firstIdTeam, secondIdTeam, null);
+    }
+
+    public List<Fixture> findHeadToHead(Integer firstIdTeam, Integer secondIdTeam){
+        _assertNotNull(firstIdTeam, secondIdTeam);
+        return this.findHeadToHead(String.valueOf(firstIdTeam), String.valueOf(secondIdTeam));
+    }
+
+    public List<Fixture> findHeadToHead(Team firstTeam, Team secondTeam){
+        _assertNotNull(firstTeam, secondTeam);
+        return this.findHeadToHead(firstTeam.getId(), secondTeam.getId());
+    }
 }
