@@ -1,10 +1,7 @@
 package it.gbale.apisports.apifootball;
 
 import it.gbale.apisports.apifootball.model.core.ApiResponse;
-import it.gbale.apisports.apifootball.model.entity.Fixture;
-import it.gbale.apisports.apifootball.model.entity.League;
-import it.gbale.apisports.apifootball.model.entity.Season;
-import it.gbale.apisports.apifootball.model.entity.Team;
+import it.gbale.apisports.apifootball.model.entity.*;
 import it.gbale.apisports.apifootball.model.parameterEnum.BaseParams;
 import it.gbale.apisports.apifootball.model.parameterEnum.FixtureParams;
 
@@ -25,6 +22,7 @@ public class FixturesApi extends BaseApi {
     private static final String FIXTURES = "fixtures";
     private static final String ROUNDS = FIXTURES+"/rounds";
     private static final String HEADTOHEAD = FIXTURES+"/headtohead";
+    private static final String STATISTIC = FIXTURES+"/statistics";
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private final RequestFactory requestFactory;
@@ -152,4 +150,28 @@ public class FixturesApi extends BaseApi {
         _assertNotNull(firstTeam, secondTeam);
         return this.findHeadToHead(firstTeam.getId(), secondTeam.getId());
     }
+
+    /**
+     * Get the statistics for one fixture. Available statistics;
+     * - Shots on Goal
+     * - Shots off Goal
+     * - Shots insidebox
+     * - Shots outsidebox
+     * - Total Shots
+     * - Blocked Shots
+     * - Fouls
+     * - Corner Kicks
+     * - Offsides
+     * - Ball Possession
+     * - Yellow Cards
+     * - Red Cards
+     * - Goalkeeper Saves
+     * - Total passes
+     * - Passes accurate
+     * - Passes %
+     */
+    public List<FixtureStatistics> getStatistics(Integer fixtureId){
+        return requestFactory.makeRequest(STATISTIC, Map.of(FixtureParams.FIXTURE, String.valueOf(fixtureId)), FixtureStatistics.class).getResponse();
+    }
+
 }

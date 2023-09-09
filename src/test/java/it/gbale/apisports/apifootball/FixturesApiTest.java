@@ -48,7 +48,7 @@ class FixturesApiTest extends GenericTest<Fixture> {
     @Test
     @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
     void findFixturesRequestSuccess() {
-        List<Fixture> response = apiFootball.fixturesApi().findFixtures(ZoneId.of("Europe/Rome"), LocalDate.now().minusDays(3), LocalDate.now(),season, league);
+        List<Fixture> response = apiFootball.fixturesApi().findFixtures(ZoneId.of("Europe/Rome"), LocalDate.now().minusDays(50), LocalDate.now(),season, league);
         this.testListObjSuccess(response, Fixture.class);
     }
 
@@ -64,7 +64,7 @@ class FixturesApiTest extends GenericTest<Fixture> {
     void getResponseRequestSuccess() {
         Map<FixtureParams,String> parameters = new HashMap<>();
         parameters.put(FixtureParams.TIMEZONE, "Europe/Rome");
-        parameters.put(FixtureParams.FROM, LocalDate.now().minusDays(3).format(formatter));
+        parameters.put(FixtureParams.FROM, LocalDate.now().minusDays(50).format(formatter));
         parameters.put(FixtureParams.TO, LocalDate.now().format(formatter));
         parameters.put(FixtureParams.SEASON, season.getYear().toString());
         parameters.put(FixtureParams.LEAGUE, league.getLeagueInfo().getId());
@@ -77,7 +77,7 @@ class FixturesApiTest extends GenericTest<Fixture> {
     void findFixturesWithParamsMapRequestSuccess() {
         Map<FixtureParams,String> parameters = new HashMap<>();
         parameters.put(FixtureParams.TIMEZONE, TimeZone.getDefault().toString());
-        parameters.put(FixtureParams.FROM, LocalDate.now().minusDays(3).format(formatter));
+        parameters.put(FixtureParams.FROM, LocalDate.now().minusDays(50).format(formatter));
         parameters.put(FixtureParams.TO, LocalDate.now().format(formatter));
         parameters.put(FixtureParams.SEASON, season.getYear().toString());
         parameters.put(FixtureParams.LEAGUE, league.getLeagueInfo().getId());
@@ -125,5 +125,25 @@ class FixturesApiTest extends GenericTest<Fixture> {
         List<Fixture> headToHead = apiFootball.fixturesApi().findHeadToHead("33", "34");
         testListObjSuccess(headToHead, Fixture.class);
         assertNotEquals(1, headToHead.size());
+    }
+
+    @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
+    void getStatistics() {
+        List<FixtureStatistics> fixtureStatistics = apiFootball.fixturesApi().getStatistics(215662);
+        assertEquals(2, fixtureStatistics.size());
+        //Tester Entry Deserialization
+        FixtureStatistics entry = fixtureStatistics.get(0);
+        if(entry.getTeamId() != 463){
+            entry = fixtureStatistics.get(1);
+        }
+        assertEquals(463, entry.getTeamId(), "Team id is incorrect");
+        assertEquals("Aldosivi", entry.getTeamName());
+        assertEquals(3, entry.getShotsOnGoal());
+        assertEquals(2, entry.getShotsOffGoal());
+        assertEquals(9, entry.getTotalShots());
+        assertEquals(0, entry.getGoalkeeperSaves());
+        assertEquals("50%", entry.getPasses());
+        assertEquals("32%", entry.getBallPossession());
     }
 }

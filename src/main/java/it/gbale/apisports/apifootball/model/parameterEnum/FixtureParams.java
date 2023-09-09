@@ -2,7 +2,7 @@ package it.gbale.apisports.apifootball.model.parameterEnum;
 
 @SuppressWarnings("unused")
 public enum FixtureParams implements BaseParams {
-    ID, IDS, LIVE, DATE, LEAGUE, SEASON, TEAM, LAST, NEXT, FROM, TO, ROUND, STATUS, VENUE, TIMEZONE, CURRENT, H2H;
+    ID, IDS, LIVE, DATE, LEAGUE, SEASON, TEAM, LAST, NEXT, FROM, TO, ROUND, STATUS, VENUE, TIMEZONE, CURRENT, H2H, FIXTURE;
 
     @Override
     public String getValue() {
