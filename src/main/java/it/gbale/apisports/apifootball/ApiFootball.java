@@ -102,4 +102,15 @@ public class ApiFootball {
         }
     }
 
+    public PredictionsApi predictionsApi(){
+        if(instancePool.containsKey(PredictionsApi.class)){
+            return (PredictionsApi) instancePool.get(PredictionsApi.class);
+        }
+        else{
+            PredictionsApi predictionsApi = new PredictionsApi(requestFactory);
+            instancePool.put(PredictionsApi.class, predictionsApi);
+            return predictionsApi;
+        }
+    }
+
 }
