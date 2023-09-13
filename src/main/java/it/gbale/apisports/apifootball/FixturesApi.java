@@ -23,6 +23,7 @@ public class FixturesApi extends BaseApi {
     private static final String ROUNDS = FIXTURES+"/rounds";
     private static final String HEADTOHEAD = FIXTURES+"/headtohead";
     private static final String STATISTIC = FIXTURES+"/statistics";
+    private static final String EVENTS = FIXTURES + "/events";
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private final RequestFactory requestFactory;
@@ -172,6 +173,13 @@ public class FixturesApi extends BaseApi {
      */
     public List<FixtureStatistics> getStatistics(Integer fixtureId){
         return requestFactory.makeRequest(STATISTIC, Map.of(FixtureParams.FIXTURE, String.valueOf(fixtureId)), FixtureStatistics.class).getResponse();
+    }
+
+    /**
+     * Get the events from a fixture.
+     */
+    public List<FixtureEvent> getEvents(Integer fixtureId){
+        return requestFactory.makeRequest(EVENTS, Map.of(FixtureParams.FIXTURE, String.valueOf(fixtureId)), FixtureEvent.class).getResponse();
     }
 
 }

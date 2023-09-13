@@ -146,4 +146,15 @@ class FixturesApiTest extends GenericTest<Fixture> {
         assertEquals("50%", entry.getPasses());
         assertEquals("32%", entry.getBallPossession());
     }
+
+    @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
+    void getEvents() {
+        List<FixtureEvent> eventList = apiFootball.fixturesApi().getEvents(215662);
+
+        Optional<FixtureEvent> event = eventList.stream().filter(fe -> fe.getEventTimeProperty().getElapsed() == 25 && fe.getTypeEvent().equalsIgnoreCase("Goal")).findFirst();
+        assertTrue(event.isPresent());
+        assertEquals("Aldosivi", event.get().getTeamProperty().getTeamName());
+        assertEquals("F. Andrada", event.get().getEventPlayerProperty().getPlayerName());
+    }
 }
