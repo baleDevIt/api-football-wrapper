@@ -24,6 +24,7 @@ public class FixturesApi extends BaseApi {
     private static final String HEADTOHEAD = FIXTURES+"/headtohead";
     private static final String STATISTIC = FIXTURES+"/statistics";
     private static final String EVENTS = FIXTURES + "/events";
+    private static final String LINEUPS = FIXTURES + "/lineups";
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private final RequestFactory requestFactory;
@@ -180,6 +181,15 @@ public class FixturesApi extends BaseApi {
      */
     public List<FixtureEvent> getEvents(Integer fixtureId){
         return requestFactory.makeRequest(EVENTS, Map.of(FixtureParams.FIXTURE, String.valueOf(fixtureId)), FixtureEvent.class).getResponse();
+    }
+
+    /**
+     *Get the lineups for a fixture.
+     * Lineups are available between 20 and 40 minutes before the fixture when the competition covers this feature.
+     * You can check this with the endpoint leagues and the coverage field.
+     */
+    public List<FixtureLineup> getLineups(Integer fixtureId){
+        return requestFactory.makeRequest(LINEUPS, Map.of(FixtureParams.FIXTURE, String.valueOf(fixtureId)), FixtureLineup.class).getResponse();
     }
 
 }

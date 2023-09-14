@@ -157,4 +157,16 @@ class FixturesApiTest extends GenericTest<Fixture> {
         assertEquals("Aldosivi", event.get().getTeamProperty().getTeamName());
         assertEquals("F. Andrada", event.get().getEventPlayerProperty().getPlayerName());
     }
+
+    @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
+    void getLineups() {
+        List<FixtureLineup> eventList = apiFootball.fixturesApi().getLineups(592872);
+
+        Optional<FixtureLineup> lineup = eventList.stream().filter(ln -> ln.getTeamLineupProperty().getTeamId() == 50).findFirst();
+        assertTrue(lineup.isPresent());
+        assertEquals("Manchester City", lineup.get().getTeamLineupProperty().getTeamName());
+        assertEquals("Ederson", lineup.get().getStartXI().stream().filter(tmpLineup -> tmpLineup.getPlayerLineupProperty().getPlayerId() == 617).findFirst().orElseThrow(ApiError::new).getPlayerLineupProperty().getPlayerName());
+        assertEquals("Guardiola", lineup.get().getCoach().getCoachName());
+    }
 }
