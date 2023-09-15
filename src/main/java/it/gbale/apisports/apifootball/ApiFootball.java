@@ -91,4 +91,26 @@ public class ApiFootball {
         }
     }
 
+    public VenuesApi venuesApi(){
+        if(instancePool.containsKey(VenuesApi.class)){
+            return (VenuesApi) instancePool.get(VenuesApi.class);
+        }
+        else{
+            VenuesApi venuesApi = new VenuesApi(requestFactory);
+            instancePool.put(VenuesApi.class, venuesApi);
+            return venuesApi;
+        }
+    }
+
+    public PredictionsApi predictionsApi(){
+        if(instancePool.containsKey(PredictionsApi.class)){
+            return (PredictionsApi) instancePool.get(PredictionsApi.class);
+        }
+        else{
+            PredictionsApi predictionsApi = new PredictionsApi(requestFactory);
+            instancePool.put(PredictionsApi.class, predictionsApi);
+            return predictionsApi;
+        }
+    }
+
 }

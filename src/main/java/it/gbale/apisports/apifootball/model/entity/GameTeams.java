@@ -7,7 +7,7 @@ import java.net.URI;
 import java.util.Map;
 
 @Data
-class GameTeams{
+public class GameTeams{
 
     private Integer teamHomeId;
     private String teamHomeName;
