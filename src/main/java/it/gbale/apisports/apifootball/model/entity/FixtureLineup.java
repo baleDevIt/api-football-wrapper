@@ -16,10 +16,10 @@ public class FixtureLineup implements Serializable {
     private final String formationSchema;
 
     @SerializedName("startXI")
-    private final List<PlayerEssential> startXI;
+    private final List<PlayerLineup> startXI;
 
     @SerializedName("substitutes")
-    private final List<PlayerEssential> substitutes;
+    private final List<PlayerLineup> substitutes;
 
     @SerializedName("coach")
     private final CoachEssential coach;

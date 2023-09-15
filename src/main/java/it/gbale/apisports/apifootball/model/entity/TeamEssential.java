@@ -7,7 +7,7 @@ import java.io.Serializable;
 import java.net.URI;
 
 @Data
-public class PlayerEssential implements Serializable {
+public class TeamEssential implements Serializable {
 
     @SerializedName("id")
     private final Integer id;
@@ -15,6 +15,7 @@ public class PlayerEssential implements Serializable {
     @SerializedName("name")
     private final String name;
 
-    @SerializedName("photo")
+    @SerializedName("logo")
     private final URI logo;
+
 }

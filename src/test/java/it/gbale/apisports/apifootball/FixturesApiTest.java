@@ -169,4 +169,74 @@ class FixturesApiTest extends GenericTest<Fixture> {
         assertEquals("Ederson", lineup.get().getStartXI().stream().filter(tmpLineup -> tmpLineup.getPlayerLineupProperty().getPlayerId() == 617).findFirst().orElseThrow(ApiError::new).getPlayerLineupProperty().getPlayerName());
         assertEquals("Guardiola", lineup.get().getCoach().getCoachName());
     }
+
+    @Test
+    @EnabledIfEnvironmentVariable(named = "SERVICETOKEN", matches = "[A-Za-z0-9@]+", disabledReason = "Token api is null or not valid")
+    void getPlayerStatistics() {
+        List<PlayerFixtureStatistics> fixtureStatistics = apiFootball.fixturesApi().getPlayerStatistics(169080);
+
+        Optional<PlayerFixtureStatistics> statistics = fixtureStatistics.stream().filter(ln -> ln.getTeam().getId() == 2284).findFirst();
+        assertTrue(statistics.isPresent());
+        //Validate Team Serializable
+        assertEquals("Monarcas", statistics.get().getTeam().getName());
+
+        Player player = statistics.get().getPlayers().stream().filter(pl -> pl.getPlayerInfo().getId() == 35931).findFirst().orElseThrow(ApiError::new);
+        //Validate Player Serializable
+        //Playerinfo
+        assertEquals("Sebastián Sosa", player.getPlayerInfo().getName());
+        assertNotNull(player.getPlayerInfo().getLogo());
+
+        PlayerStatistics playerStatistics = player.getPlayerStatistics().stream().findFirst().orElseThrow(ApiError::new);
+        // getGameStatistics() Serializable
+        assertEquals(90, playerStatistics.getGameStatistics().getMinutes());
+        assertEquals(13, playerStatistics.getGameStatistics().getNumber());
+        assertEquals("G", playerStatistics.getGameStatistics().getPosition());
+        assertEquals("6.3", playerStatistics.getGameStatistics().getRating());
+        assertEquals(false, playerStatistics.getGameStatistics().getCaptain());
+        assertEquals(false, playerStatistics.getGameStatistics().getSubstitute());
+
+        // getShotsStatistics() Serializable
+        assertEquals(0, playerStatistics.getShotsStatistics().getTotal());
+        assertEquals(0, playerStatistics.getShotsStatistics().getOn());
+
+        // getGoalsStatistics() Serializable
+        assertNull(playerStatistics.getGoalsStatistics().getTotal());
+        assertEquals(1, playerStatistics.getGoalsStatistics().getConceded());
+        assertNull(playerStatistics.getGoalsStatistics().getAssists());
+        assertEquals(1, playerStatistics.getGoalsStatistics().getSaves());
+
+        // getPassesStatistics() Serializable
+        assertEquals(17, playerStatistics.getPassesStatistics().getTotal());
+        assertEquals(0, playerStatistics.getPassesStatistics().getKey());
+        assertEquals("68%", playerStatistics.getPassesStatistics().getAccuracy());
+
+        // getTacklesStatistics() Serializable
+        assertNull(playerStatistics.getTacklesStatistics().getTotal());
+        assertEquals(0, playerStatistics.getTacklesStatistics().getBlocks());
+        assertEquals(0, playerStatistics.getTacklesStatistics().getInterceptions());
+
+        // getDuelsStatistics() Serializable
+        assertEquals(0, playerStatistics.getDuelsStatistics().getTotal());
+        assertEquals(0, playerStatistics.getDuelsStatistics().getWon());
+
+        // getDribblesStatistics() Serializable
+        assertEquals(0, playerStatistics.getDribblesStatistics().getAttempts());
+        assertEquals(0, playerStatistics.getDribblesStatistics().getSuccess());
+        assertNull(playerStatistics.getDribblesStatistics().getPast());
+
+        // getFoulsStatistics() Serializable
+        assertEquals(0, playerStatistics.getFoulsStatistics().getDrawn());
+        assertEquals(0, playerStatistics.getFoulsStatistics().getCommitted());
+
+        // getDuelsStatistics() Serializable
+        assertEquals(0, playerStatistics.getCardsStatistics().getYellow());
+        assertEquals(0, playerStatistics.getCardsStatistics().getRed());
+
+        // getPenaltyStatistics() Serializable
+        assertNull(playerStatistics.getPenaltyStatistics().getWon());
+        assertNull(playerStatistics.getPenaltyStatistics().getCommited());
+        assertEquals(0, playerStatistics.getPenaltyStatistics().getScored());
+        assertEquals(0, playerStatistics.getPenaltyStatistics().getMissed());
+        assertEquals(0, playerStatistics.getPenaltyStatistics().getSaved());
+    }
 }
