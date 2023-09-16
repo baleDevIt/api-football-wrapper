@@ -1,9 +1,7 @@
 package it.gbale.apisports.apifootball;
 
 import it.gbale.apisports.apifootball.model.core.ApiResponse;
-import it.gbale.apisports.apifootball.model.entity.Fixture;
-import it.gbale.apisports.apifootball.model.entity.League;
-import it.gbale.apisports.apifootball.model.entity.Season;
+import it.gbale.apisports.apifootball.model.entity.*;
 import it.gbale.apisports.apifootball.model.parameterEnum.BaseParams;
 import it.gbale.apisports.apifootball.model.parameterEnum.FixtureParams;
 
@@ -16,11 +14,18 @@ import java.util.Map;
 import java.util.Optional;
 
 import static it.gbale.apisports.utils.Validation._assertNotNull;
+import static it.gbale.apisports.utils.Validation._assertNotNullorEmpty;
 
 @SuppressWarnings("unused")
 public class FixturesApi extends BaseApi {
 
-    private static final String ENDPOINT = "fixtures";
+    private static final String FIXTURES = "fixtures";
+    private static final String ROUNDS = FIXTURES+"/rounds";
+    private static final String HEADTOHEAD = FIXTURES+"/headtohead";
+    private static final String STATISTIC = FIXTURES+"/statistics";
+    private static final String EVENTS = FIXTURES + "/events";
+    private static final String LINEUPS = FIXTURES + "/lineups";
+    private static final String PLAYERS = FIXTURES + "/players";
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private final RequestFactory requestFactory;
@@ -60,7 +65,7 @@ public class FixturesApi extends BaseApi {
 
     public ApiResponse<Fixture> getResponse(Map<? extends BaseParams, String> parametersRequest){
         _assertNotNull(parametersRequest);
-        return requestFactory.makeRequest(ENDPOINT, parametersRequest, Fixture.class);
+        return requestFactory.makeRequest(FIXTURES, parametersRequest, Fixture.class);
     }
 
     /**
@@ -114,4 +119,81 @@ public class FixturesApi extends BaseApi {
         return getResponse(params).getResponse();
     }
 
+
+    /**
+     * Get the rounds for a league or a cup.
+     */
+    public List<String> findRoundsByLeague(String season, String league){
+        _assertNotNullorEmpty(season, league);
+        return requestFactory.makeRequest(ROUNDS, Map.of(FixtureParams.SEASON, season, FixtureParams.LEAGUE, league), String.class).getResponse();
+    }
+
+    /**
+     * Get heads to heads between two teams.
+     */
+    public List<Fixture> findHeadToHead(String firstIdTeam, String secondIdTeam, Integer numberOfEvent){
+        _assertNotNullorEmpty(firstIdTeam, secondIdTeam);
+        String h2hParam = firstIdTeam + "-" + secondIdTeam;
+        if(numberOfEvent == null){
+            return requestFactory.makeRequest(HEADTOHEAD, Map.of(FixtureParams.H2H, h2hParam), Fixture.class).getResponse();
+        }
+        return requestFactory.makeRequest(HEADTOHEAD, Map.of(FixtureParams.H2H, h2hParam, FixtureParams.LAST, String.valueOf(numberOfEvent)), Fixture.class).getResponse();
+    }
+
+    public List<Fixture> findHeadToHead(String firstIdTeam, String secondIdTeam){
+        return this.findHeadToHead(firstIdTeam, secondIdTeam, null);
+    }
+
+    public List<Fixture> findHeadToHead(Integer firstIdTeam, Integer secondIdTeam){
+        _assertNotNull(firstIdTeam, secondIdTeam);
+        return this.findHeadToHead(String.valueOf(firstIdTeam), String.valueOf(secondIdTeam));
+    }
+
+    public List<Fixture> findHeadToHead(Team firstTeam, Team secondTeam){
+        _assertNotNull(firstTeam, secondTeam);
+        return this.findHeadToHead(firstTeam.getId(), secondTeam.getId());
+    }
+
+    /**
+     * Get the statistics for one fixture. Available statistics;
+     * - Shots on Goal
+     * - Shots off Goal
+     * - Shots insidebox
+     * - Shots outsidebox
+     * - Total Shots
+     * - Blocked Shots
+     * - Fouls
+     * - Corner Kicks
+     * - Offsides
+     * - Ball Possession
+     * - Yellow Cards
+     * - Red Cards
+     * - Goalkeeper Saves
+     * - Total passes
+     * - Passes accurate
+     * - Passes %
+     */
+    public List<FixtureStatistics> getStatistics(Integer fixtureId){
+        return requestFactory.makeRequest(STATISTIC, Map.of(FixtureParams.FIXTURE, String.valueOf(fixtureId)), FixtureStatistics.class).getResponse();
+    }
+
+    /**
+     * Get the events from a fixture.
+     */
+    public List<FixtureEvent> getEvents(Integer fixtureId){
+        return requestFactory.makeRequest(EVENTS, Map.of(FixtureParams.FIXTURE, String.valueOf(fixtureId)), FixtureEvent.class).getResponse();
+    }
+
+    /**
+     *Get the lineups for a fixture.
+     * Lineups are available between 20 and 40 minutes before the fixture when the competition covers this feature.
+     * You can check this with the endpoint leagues and the coverage field.
+     */
+    public List<FixtureLineup> getLineups(Integer fixtureId){
+        return requestFactory.makeRequest(LINEUPS, Map.of(FixtureParams.FIXTURE, String.valueOf(fixtureId)), FixtureLineup.class).getResponse();
+    }
+
+    public List<PlayerFixtureStatistics> getPlayerStatistics(Integer fixtureId){
+        return requestFactory.makeRequest(PLAYERS, Map.of(FixtureParams.FIXTURE, String.valueOf(fixtureId)), PlayerFixtureStatistics.class).getResponse();
+    }
 }
